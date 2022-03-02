@@ -26,17 +26,17 @@ class BoardPlotter:
     
     def __init__(self, a_board):
         self.board = a_board
-        clues = self.board.clues
+        self.clues = self.board.puzzle.given_clues
       
         def row_clue_to_label(v):
             #print(v)
             return str(v) if not isinstance(v, list) else ' '.join(map(str,v))
-        self.rows_labels = list(map(row_clue_to_label, clues['rows']))
+        self.rows_labels = list(map(row_clue_to_label, self.clues['rows']))
 
         def col_clue_to_label(v):
             #print(v)
             return str(v) if not isinstance(v, list) else '\n'.join(map(str,v))
-        self.cols_labels = list(map(col_clue_to_label, clues['cols']))
+        self.cols_labels = list(map(col_clue_to_label, self.clues['cols']))
     
     def show(self):
         # WARNING :  the board is row col, while the fig is col row
@@ -69,8 +69,8 @@ class BoardPlotter:
         
 
         # set labels
-        column_labels = self.board.clues['cols']
-        row_labels = self.board.clues['rows']
+        column_labels = self.clues['cols']
+        row_labels = self.clues['rows']
 
         ax.set_xticklabels(self.cols_labels, minor=False)
         ax.set_yticklabels(self.rows_labels, minor=False)
