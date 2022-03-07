@@ -309,10 +309,14 @@ class GameEngine:
             
         self.puzzle = a_puzzle
         self.solution = a_solution
-        
+        self.flat_solution = self.solution.reshape(self.puzzle.cells_count).tolist()
+    
         # init a board
         self.board = Board(a_puzzle)
         self.plotter = BoardPlotter(self.board)
+        
+        # init score
+        self.errors = 0
         
         
     def show_board(self):
@@ -326,17 +330,20 @@ class GameEngine:
         ''' 
         Check whether an action is valid given a solution 
         '''
-        return self.solution[row, col] == mark.value        
+        okay = self.solution[row, col] == mark.value   
+        if not okay:
+            self.errors += 1
+        return okay    
     
     
     def is_expected_solution(self, states_list):
         ''' 
         Check whether the states given a the regidtered solution 
         '''
-        flat_solution = self.solution.reshape(self.cells_count).tolist()
-        return  flat_solution == states_list
+        self.errors = sum([abs(p-e) for (p,e) in zip(states_list, self.flat_solution) if p>=0])
+        return  states_list == self.flat_solution # must account for empty 
     
-    
+           
     def is_solved(self):
         '''
         Check whether the puzzle is solved
@@ -378,8 +385,7 @@ class GameEngine:
         blocks = [ [len(list(g)) for k,g in groupby(line) if k==1]
           for line in cols
         ]
-        return blocks
-    
+        return blocks    
     
 # ------------------------
 
