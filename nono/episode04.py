@@ -340,7 +340,9 @@ class GameEngine:
         ''' 
         Check whether the states given a the regidtered solution 
         '''
+        # compute the difference between given board and known solution
         self.errors = sum([abs(p-e) for (p,e) in zip(states_list, self.flat_solution) if p>=0])
+        # board is okay when full and without errors
         return  states_list == self.flat_solution # must account for empty 
     
            
