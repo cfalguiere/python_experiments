@@ -161,6 +161,19 @@ class BoardGameEngine:
         # init a board
         self.board = Board(a_puzzle)
         self.plotter = BoardPlotter(a_puzzle)
+   
+
+    def play(self, row, col, mark, apply=True):
+        pass
+    
+    
+    def play_multiple(self, row, col, mark, axis, count):
+        if axis == 0: # row
+            for i in range(col, min(self.puzzle.width, col+count)):
+                self.play(row, i, mark) 
+        if axis == 1: # row
+            for i in range(row, min(self.puzzle.height, row+count)):
+                self.play(i, col, mark)
         
         
     def show(self):

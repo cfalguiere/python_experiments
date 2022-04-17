@@ -26,6 +26,25 @@ solution2x2 = np.array([[1, 0],
 
 # ------------------------
 
+clues5x5 = {
+    'rows': [1, 2, 2, 3, 5],
+    'cols': [5, 4, 3, 1, 1]
+}
+
+solution5x5 = np.array([[1, 0, 0, 0, 0],
+                        [1, 1, 0, 0, 0],
+                        [1, 1, 0, 0, 0],
+                        [1, 1, 1, 0, 0],
+                        [1, 1, 1, 1, 1]])
+
+# xoooo
+# xxooo
+# xxooo
+# xxxoo
+# xxxxx
+
+# ------------------------
+
 # game instructions for a 5x5 game
 
 # Please note that list are base 0 in Python 
@@ -463,6 +482,19 @@ class BoardGameEngine:
         self.plotter = BoardPlotter(a_puzzle)
         
         
+    def play(self, row, col, mark, apply=True):
+        pass
+    
+    
+    def play_multiple(self, row, col, mark, axis, count):
+        if axis == 0: # row
+            for i in range(col, min(self.puzzle.width, col+count)):
+                self.play(row, i, mark) 
+        if axis == 1: # row
+            for i in range(row, min(self.puzzle.height, row+count)):
+                self.play(i, col, mark)
+ 
+
     def show(self):
         ''' 
         Plot the board
