@@ -1,7 +1,7 @@
 import pytest
 
-from board import BoardMark, Board
-from samples import clues2x2
+from episode01.board import BoardMark, Board
+from episode01.samples import clues2x2
 
 
 def test_init():

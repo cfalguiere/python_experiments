@@ -1,3 +1,5 @@
+import numpy as np
+
 # ------------------------
 
 # given input for a 2x2 puzzle
@@ -18,6 +20,11 @@ clues2x2 = {
 # If o marks blacks and x marks fillers, the solution is
 # ox
 # xx
+
+
+solution2x2 = np.array([[1, 0],
+                        [1, 1]])
+
 
 # ------------------------
 
@@ -45,3 +52,10 @@ clues5x5s = {
 # xoxox
 # xooox
 # ooooo
+
+
+solution5x5s = np.array([[0, 0, 1, 0, 0],
+                        [0, 1, 1, 1, 0],
+                        [0, 1, 0, 1, 0],
+                        [0, 1, 1, 1, 0],
+                        [1, 1, 1, 1, 1]])
