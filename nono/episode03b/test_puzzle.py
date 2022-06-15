@@ -10,6 +10,15 @@ def test_init_clues2x2():
     assert puzzle2x2.is_consistent()
 
 
+def test_dimensions():
+    puzzle2x2 = Puzzle(clues2x2)
+    assert puzzle2x2.width == 2
+    assert puzzle2x2.height == 2
+    assert puzzle2x2.cells_count == 4
+    assert puzzle2x2.get_black_count() == 3
+    assert puzzle2x2.is_consistent()
+
+
 def test_init_clues5x5s():
     puzzle5x5s = Puzzle(clues5x5s)
     assert puzzle5x5s.required_blacks_count == 14
