@@ -1,0 +1,72 @@
+import numpy as np
+
+from enum import Enum
+from operator import mul
+from functools import reduce
+
+
+# constants for mark lette
+class BoardMark(Enum):
+    INIT = -1
+    FILLER = 0
+    BLACK = 1
+
+
+class Board:
+    '''
+    Manage the board.
+    '''
+
+    def __init__(self, a_puzzle):
+        '''
+        Board constructor
+        '''
+        # given parameters
+        self.puzzle = a_puzzle
+
+        # compute board dimensions
+        self.width = a_puzzle.width
+        self.height = a_puzzle.height
+        self.cells_count = a_puzzle.cells_count
+
+        # create board of type int, initialized with -1
+        default_value = BoardMark.INIT.value
+        self.states = np.full((self.height, self.width), default_value, dtype=int)
+
+    def mark(self, row, col, mark):
+        '''
+        Mark a cell
+        '''
+        self.states[row, col] = mark.value
+
+    def fill_all(self, states):
+        '''
+        Uodate all cells with states
+        '''
+        self.states.flat[:] = states
+
+    def count_empty(self):
+        '''
+        Evaluate how much of the board is filled
+        '''
+        length = reduce(mul, self.states.shape)
+        count = len([c for c in self.states.reshape(length)
+                     if c == BoardMark.INIT.value])
+        return count
+
+    def prettyprint(self):
+        '''
+        Pretty print of the board
+        '''
+        print("cols:", end=" ")
+        print(*self.puzzle.given_clues['cols'])  # * unpacks and remove []s
+        print("rows:")
+        [print(r) for r in self.puzzle.given_clues['rows']]
+
+        marks_switcher = {-1: '.', 0: 'x', 1: 'o'}
+
+        def f_marks(v):
+            return marks_switcher[v]
+        applyall = np.vectorize(f_marks)
+        marks = applyall(self.states)
+        print(marks)
