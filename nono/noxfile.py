@@ -2,8 +2,8 @@ import nox
 
 nox.options.sessions = ['lint', 'tests', 'lint_notebooks', 'check_notebooks']
 
-# prefixes = ['01', '02', '03a', '03b', '03c', '03d', '04']
-prefixes = ['04']
+prefixes = ['01', '02', '03a', '03b', '03c', '03d', '04']
+# prefixes = ['04']
 
 nox.options.reuse_existing_virtualenvs = True
 

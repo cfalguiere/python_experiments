@@ -4,6 +4,9 @@ from episode04.samples import clues2x2, solution2x2
 from episode04.board import BoardMark, Board
 from episode04.puzzle import Puzzle
 
+from io import StringIO
+import sys
+
 
 def test_init():
     puzzle2x2 = Puzzle(clues2x2)
@@ -64,3 +67,70 @@ def test_count_0_empty_after_fill_all():
     board2x2 = Board(puzzle2x2)
     board2x2.fill_all(solution2x2)
     assert board2x2.count_empty() == 0
+
+
+def test_prettyprint_empty():
+    captureOutput = StringIO()
+    sys.stdout = captureOutput
+    puzzle2x2 = Puzzle(clues2x2)
+    board2x2 = Board(puzzle2x2)
+    board2x2.prettyprint()
+    sys.stdout = sys.__stdout__
+
+    captureOutput.seek(0)
+    pp = captureOutput.readlines()
+    assert len(pp) == 6
+    assert pp[0][0:-1] == "cols: 2 1"  # strip \n
+    assert pp[1][0:-1] == "rows:"  # strip \n
+    assert pp[2][0:-1] == "1"  # strip \n
+    assert pp[3][0:-1] == "2"  # strip \n
+    assert pp[4][0:-1] == "[['.' '.']"  # strip \n
+    assert pp[5][0:-1] == " ['.' '.']]"  # strip \n
+
+
+def test_prettyprint_mark_black():
+    captureOutput = StringIO()
+    sys.stdout = captureOutput
+    puzzle2x2 = Puzzle(clues2x2)
+    board2x2 = Board(puzzle2x2)
+    board2x2.mark(1, 1, BoardMark.BLACK)
+    board2x2.prettyprint()
+    sys.stdout = sys.__stdout__
+
+    captureOutput.seek(0)
+    pp = captureOutput.readlines()
+    assert len(pp) == 6
+    assert pp[4][0:-1] == "[['.' '.']"  # strip \n
+    assert pp[5][0:-1] == " ['.' 'o']]"  # strip \n
+
+
+def test_prettyprint_mark_filler():
+    captureOutput = StringIO()
+    sys.stdout = captureOutput
+    puzzle2x2 = Puzzle(clues2x2)
+    board2x2 = Board(puzzle2x2)
+    board2x2.mark(0, 1, BoardMark.FILLER)
+    board2x2.prettyprint()
+    sys.stdout = sys.__stdout__
+
+    captureOutput.seek(0)
+    pp = captureOutput.readlines()
+    assert len(pp) == 6
+    assert pp[4][0:-1] == "[['.' 'x']"  # strip \n
+    assert pp[5][0:-1] == " ['.' '.']]"  # strip \n
+
+
+def test_prettyprint_solved():
+    captureOutput = StringIO()
+    sys.stdout = captureOutput
+    puzzle2x2 = Puzzle(clues2x2)
+    board2x2 = Board(puzzle2x2)
+    board2x2.fill_all(solution2x2)
+    board2x2.prettyprint()
+    sys.stdout = sys.__stdout__
+
+    captureOutput.seek(0)
+    pp = captureOutput.readlines()
+    assert len(pp) == 6
+    assert pp[4][0:-1] == "[['o' 'x']"  # strip \n
+    assert pp[5][0:-1] == " ['o' 'o']]"  # strip \n
