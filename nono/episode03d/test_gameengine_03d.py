@@ -1,4 +1,5 @@
-from episode03d.gameengine import BoardGameEngine, NonoGameEngine, SolvedNonoGameEngine
+from episode03d.gameengine import BoardGameEngine
+from episode03d.gameengine import NonoGameEngine, SolvedNonoGameEngine
 from episode01.samples import clues2x2, solution2x2, clues5x5s, solution5x5s
 from episode03b.puzzle import Puzzle
 from episode03b.board import BoardMark
@@ -80,10 +81,10 @@ def test_submit_5x5s_no_errors():
     assert game5x5s.is_solved()
 
 
-def test_play_with_errors():
+def test_play_with_autofixed_errors():
     puzzle2x2 = Puzzle(clues2x2)
     game2x2 = SolvedNonoGameEngine(puzzle2x2, solution2x2)
-    okay = game2x2.play(0, 0, BoardMark.FILLER)  # error -> fixed but counted error
+    okay = game2x2.play(0, 0, BoardMark.FILLER)  # autofixed error
     assert not okay
     okay = game2x2.play(1, 0, BoardMark.BLACK)  # correct
     assert okay

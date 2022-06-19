@@ -1,17 +1,18 @@
-from episode04.board import Board
-
-import numpy as np
 from math import ceil
+
+from episode04.board import Board
 
 import matplotlib.pyplot as plt
 from matplotlib.colors import LinearSegmentedColormap
 
+import numpy as np
+
 
 class BoardPlotter:
-    '''
+    """
     Plot the board.
-    Requiere %matplotlib inline .
-    '''
+    Require %matplotlib inline .
+    """
 
     def __init__(self, a_puzzle):
         self.clues = a_puzzle.given_clues
@@ -25,19 +26,21 @@ class BoardPlotter:
         # rule of thumb
         # 1 fits 2 cells
         # 2 fits 5 cols
-        self.fig_width = int(self.width/2)
-        self.fig_height = int(self.height/2)
+        self.fig_width = int(self.width / 2)
+        self.fig_height = int(self.height / 2)
 
         # rows labels
         def row_clue_to_label(v):
-            return str(v) if not isinstance(v, list) else ' '.join(map(str, v))
-        self.rows_labels = list(map(row_clue_to_label, self.clues['rows']))
+            is_list = isinstance(v, list)
+            return str(v) if not is_list else " ".join(map(str, v))
+        self.rows_labels = list(map(row_clue_to_label, self.clues["rows"]))
 
         # columns labels
         def col_clue_to_label(v):
             # print(v)
-            return str(v) if not isinstance(v, list) else '\n'.join(map(str, v))
-        self.columns_labels = list(map(col_clue_to_label, self.clues['cols']))
+            is_list = isinstance(v, list)
+            return str(v) if not is_list else '\n'.join(map(str, v))
+        self.columns_labels = list(map(col_clue_to_label, self.clues["cols"]))
 
         # color map
         self.cmap = self.build_color_map()
@@ -79,7 +82,7 @@ class BoardPlotter:
         # TODO nb depending on board size
         cols_mapping = {2: 7, 5: 5}
         n_cols = cols_mapping[self.width]
-        n_lines = ceil(len(boards)/n_cols)
+        n_lines = ceil(len(boards) / n_cols)
 
         fig = plt.figure()
         fig.subplots_adjust(left=5, right=15, top=13, bottom=5)
@@ -88,7 +91,7 @@ class BoardPlotter:
             # enumerate is base 0. figures are labelled base 1
             # TODO explain slots names
             plt.rcParams['figure.figsize'] = [self.fig_width, self.fig_height]
-            ax = fig.add_subplot(n_lines, n_cols, i+1)
+            ax = fig.add_subplot(n_lines, n_cols, i + 1)
             self._plot(board, ax)
 
         plt.show()  # plt is static
@@ -124,8 +127,10 @@ class BoardPlotter:
 
         # annotate fillers
         # expect (col,row) is (1,0) for row=0 col=1
-        fillers_coordinates = [(p % self.width + 0.5, int(p/self.width) + 0.5)
-                               for (p, v) in enumerate(data.reshape(self.flat_length))
+        cells = data.reshape(self.flat_length)
+        w = self.width
+        fillers_coordinates = [(p % w + 0.5, int(p / w) + 0.5)
+                               for (p, v) in enumerate(cells)
                                if v == 0]
 
         # place an X in the center of each coordinate for fillers

@@ -1,11 +1,11 @@
-import pytest
-
-from episode04.samples import clues2x2, solution2x2
-from episode04.board import BoardMark, Board
-from episode04.puzzle import Puzzle
-
-from io import StringIO
 import sys
+from io import StringIO
+
+from episode04.board import Board, BoardMark
+from episode04.puzzle import Puzzle
+from episode04.samples import clues2x2, solution2x2
+
+import pytest
 
 
 def test_init():

@@ -1,0 +1,12 @@
+# .flake8
+[flake8]
+select = ANN,C,E,F,I,S,W,N8'
+
+#select = ANN,B,B9,BLK,C,E,F,I,S,W
+
+#'--ignore=E501,I202,F401,F841',
+
+per-file-ignores =
+  tests/*:S101,ANN
+  test_*:S101,ANN
+  noxfile.py:ANN

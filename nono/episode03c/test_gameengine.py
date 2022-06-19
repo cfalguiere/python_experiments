@@ -37,7 +37,7 @@ def test_submit_no_errors():
     assert game2x2.is_solved()
 
 
-def test_submit_with_errors():
+def test_play_with_autofixed_errors():
     puzzle2x2 = Puzzle(clues2x2)
     game2x2 = NonoGameEngine(puzzle2x2)
 

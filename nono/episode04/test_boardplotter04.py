@@ -1,6 +1,6 @@
-from episode04.samples import clues2x2
-from episode04.puzzle import Puzzle
 from episode04.boardplotter import BoardPlotter
+from episode04.puzzle import Puzzle
+from episode04.samples import clues2x2
 
 
 def test_init():
