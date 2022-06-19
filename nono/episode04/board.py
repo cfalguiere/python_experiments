@@ -1,8 +1,8 @@
-import numpy as np
-
 from enum import Enum
-from operator import mul
 from functools import reduce
+from operator import mul
+
+import numpy as np
 
 
 # constants for mark lette
@@ -13,14 +13,14 @@ class BoardMark(Enum):
 
 
 class Board:
-    '''
+    """
     Manage the board.
-    '''
+    """
 
     def __init__(self, a_puzzle):
-        '''
+        """
         Board constructor
-        '''
+        """
         # given parameters
         self.puzzle = a_puzzle
 
@@ -31,33 +31,35 @@ class Board:
 
         # create board of type int, initialized with -1
         default_value = BoardMark.INIT.value
-        self.states = np.full((self.height, self.width), default_value, dtype=int)
+        self.states = np.full((self.height, self.width),
+                              default_value,
+                              dtype=int)
 
     def mark(self, row, col, mark):
-        '''
+        """
         Mark a cell
-        '''
+        """
         self.states[row, col] = mark.value
 
     def fill_all(self, states):
-        '''
+        """
         Uodate all cells with states
-        '''
+        """
         self.states.flat[:] = states
 
     def count_empty(self):
-        '''
+        """
         Evaluate how much of the board is filled
-        '''
+        """
         length = reduce(mul, self.states.shape)
         count = len([c for c in self.states.reshape(length)
                      if c == BoardMark.INIT.value])
         return count
 
     def prettyprint(self):
-        '''
+        """
         Pretty print of the board
-        '''
+        """
         print("cols:", end=" ")
         print(*self.puzzle.given_clues['cols'])  # * unpacks and remove []s
         print("rows:")

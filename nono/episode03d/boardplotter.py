@@ -30,13 +30,15 @@ class BoardPlotter:
 
         # rows labels
         def row_clue_to_label(v):
-            return str(v) if not isinstance(v, list) else ' '.join(map(str, v))
+            is_list = isinstance(v, list)
+            return str(v) if not is_list else ' '.join(map(str, v))
         self.rows_labels = list(map(row_clue_to_label, self.clues['rows']))
 
         # columns labels
         def col_clue_to_label(v):
             # print(v)
-            return str(v) if not isinstance(v, list) else '\n'.join(map(str, v))
+            is_list = isinstance(v, list)
+            return str(v) if not is_list else '\n'.join(map(str, v))
         self.columns_labels = list(map(col_clue_to_label, self.clues['cols']))
 
         # color map
@@ -124,8 +126,10 @@ class BoardPlotter:
 
         # annotate fillers
         # expect (col,row) is (1,0) for row=0 col=1
-        fillers_coordinates = [(p % self.width + 0.5, int(p/self.width) + 0.5)
-                               for (p, v) in enumerate(data.reshape(self.flat_length))
+        cells = data.reshape(self.flat_length)
+        w = self.width
+        fillers_coordinates = [(p % w + 0.5, int(p / w) + 0.5)
+                               for (p, v) in enumerate(cells)
                                if v == 0]
 
         # place an X in the center of each coordinate for fillers

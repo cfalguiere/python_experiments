@@ -154,7 +154,8 @@ class SolvedNonoGameEngine(NonoGameEngine):
         super().__init__(a_puzzle, track)
 
         self.solution = a_solution
-        self.flat_solution = self.solution.reshape(self.puzzle.cells_count).tolist()
+        cells = self.puzzle.cells_count
+        self.flat_solution = self.solution.reshape(cells).tolist()
 
         # init score
         self.errors = 0
