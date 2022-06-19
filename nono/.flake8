@@ -4,6 +4,7 @@ select = ANN,C,E,F,I,S,W,N8'
 
 #select = ANN,B,B9,BLK,C,E,F,I,S,W
 
+#W,E112,E113,F,C9,N8'
 #'--ignore=E501,I202,F401,F841',
 
 per-file-ignores =
