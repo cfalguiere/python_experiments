@@ -103,12 +103,12 @@ class NonoGameEngine(BoardGameEngine):
 
         # for rows
         board_rows = self.get_rows_blocks()
-        clues_rows = self.puzzle.norm_clues["rows"]
+        clues_rows = self.puzzle.norm_clues['rows']
         rows_errors = sum([abs(sum(b) - sum(c))
                            for (b, c) in zip(board_rows, clues_rows)])
         # for cols
         board_cols = self.get_cols_blocks()
-        clues_cols = self.puzzle.norm_clues["cols"]
+        clues_cols = self.puzzle.norm_clues['cols']
         cols_errors = sum([abs(sum(b) - sum(c))
                            for (b, c) in zip(board_cols, clues_cols)])
         return int((rows_errors + cols_errors) / 2)  # row error => col error

@@ -18,8 +18,8 @@ class BoardPlotter:
         self.clues = a_puzzle.given_clues
 
         # board dimensions
-        self.width = len(self.clues["rows"])
-        self.height = len(self.clues["cols"])
+        self.width = len(self.clues['rows'])
+        self.height = len(self.clues['cols'])
         self.flat_length = self.width * self.height
 
         # guess the figure size
@@ -31,16 +31,16 @@ class BoardPlotter:
 
         # rows labels
         def row_clue_to_label(v):
-            is_list = isinstance(v, list)
-            return str(v) if not is_list else " ".join(map(str, v))
-        self.rows_labels = list(map(row_clue_to_label, self.clues["rows"]))
+            is_value = not isinstance(v, list)
+            return str(v) if is_value else ' '.join(map(str, v))
+        self.rows_labels = list(map(row_clue_to_label, self.clues['rows']))
 
         # columns labels
         def col_clue_to_label(v):
             # print(v)
-            is_list = isinstance(v, list)
-            return str(v) if not is_list else '\n'.join(map(str, v))
-        self.columns_labels = list(map(col_clue_to_label, self.clues["cols"]))
+            is_value = not isinstance(v, list)
+            return str(v) if is_value else '\n'.join(map(str, v))
+        self.columns_labels = list(map(col_clue_to_label, self.clues['cols']))
 
         # color map
         self.cmap = self.build_color_map()
@@ -127,11 +127,10 @@ class BoardPlotter:
 
         # annotate fillers
         # expect (col,row) is (1,0) for row=0 col=1
-        cells = data.reshape(self.flat_length)
-        w = self.width
-        fillers_coordinates = [(p % w + 0.5, int(p / w) + 0.5)
-                               for (p, v) in enumerate(cells)
-                               if v == 0]
+        fillers_coordinates =\
+            [(p % self.width + 0.5, int(p / self.width) + 0.5)
+             for (p, v) in enumerate(data.reshape(self.flat_length))
+             if v == 0]
 
         # place an X in the center of each coordinate for fillers
         for coord in fillers_coordinates:

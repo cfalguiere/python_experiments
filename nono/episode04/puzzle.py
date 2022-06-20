@@ -18,8 +18,8 @@ class Puzzle:
         self.norm_clues = self.init_norm_clues()
 
         # compute board dimensions
-        self.width = len(some_clues["cols"])
-        self.height = len(some_clues["rows"])
+        self.width = len(some_clues['cols'])
+        self.height = len(some_clues['rows'])
         self.cells_count = self.width * self.height
         self.required_blacks_count = self.get_black_count()
 
@@ -31,8 +31,8 @@ class Puzzle:
         def f_norm_clue(clue):
             return clue if isinstance(clue, list) else [clue]
         norm_clues = {
-            'rows': [f_norm_clue(clue) for clue in self.given_clues["rows"]],
-            'cols': [f_norm_clue(clue) for clue in self.given_clues["cols"]]
+            'rows': [f_norm_clue(clue) for clue in self.given_clues['rows']],
+            'cols': [f_norm_clue(clue) for clue in self.given_clues['cols']]
         }
         return norm_clues
 
