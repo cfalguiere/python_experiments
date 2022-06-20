@@ -1,29 +1,29 @@
-import numpy as np
-
 import matplotlib.pyplot as plt
 from matplotlib.colors import LinearSegmentedColormap
 
+import numpy as np
+
 
 class BoardPlotter:
-    '''
+    """
     Plot the board.
     Requiere %matplotlib inline .
-    '''
+    """
 
     def __init__(self, some_clues):
         self.clues = some_clues
 
         # board dimensions
-        self.width = len(self.clues["rows"])
-        self.height = len(self.clues["cols"])
+        self.width = len(self.clues['rows'])
+        self.height = len(self.clues['cols'])
         self.flat_length = self.width * self.height
 
         # guess the figure size
         # rule of thumb
         # 1 fits 2 cells
         # 2 fits 5 cols
-        self.fig_width = int(self.width/2)
-        self.fig_height = int(self.height/2)
+        self.fig_width = int(self.width / 2)
+        self.fig_height = int(self.height / 2)
 
         # rows labels
         def row_clue_to_label(v):
