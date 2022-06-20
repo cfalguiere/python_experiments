@@ -1,6 +1,6 @@
 from episode04.board import BoardMark
-from episode04.gameengine import BoardGameEngine
-from episode04.gameengine import NonoGameEngine, SolvedNonoGameEngine
+from episode04.gameengine import BoardGameEngine, \
+                                 NonoGameEngine, SolvedNonoGameEngine
 from episode04.puzzle import Puzzle
 from episode04.samples import clues2x2, clues5x5s, solution2x2, solution5x5s
 

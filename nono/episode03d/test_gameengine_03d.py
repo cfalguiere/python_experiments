@@ -3,8 +3,8 @@ from episode01.samples import clues2x2, clues5x5s, solution2x2, solution5x5s
 
 from episode03b.puzzle import Puzzle
 
-from episode03d.gameengine import BoardGameEngine
-from episode03d.gameengine import NonoGameEngine, SolvedNonoGameEngine
+from episode03d.gameengine import BoardGameEngine, \
+                                  NonoGameEngine, SolvedNonoGameEngine
 
 
 def test_init():

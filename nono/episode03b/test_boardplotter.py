@@ -1,4 +1,5 @@
 from episode01.samples import clues2x2
+
 from episode03b.boardplotter import BoardPlotter
 from episode03b.puzzle import Puzzle
 
