@@ -1,13 +1,19 @@
+import os
+
 import nox
 
 nox.options.sessions = ["lint", "tests", "lint_notebooks", "check_notebooks"]
 # 'mypy', 'pytype',
-# prefixes = ['01', '02', '03a', '03b', '03c', '03d', '04']
-prefixes = ['01', '02', '03a', '03b', '03c', '03d', "04"]
+
+game_utils_prefixes = ['01', '02', '03a', '03b', '03c', '03d', "04"]
+current_prefixe = ['05']
+prefixes = current_prefixe
 
 nox.options.reuse_existing_virtualenvs = True
 
 PYTHON_VERSION = "3.8"
+
+BUILD_DIR = "build"
 
 
 @nox.session(python=PYTHON_VERSION)
@@ -88,12 +94,16 @@ def lint_notebooks(session):
                                     filename)
 
 
-@nox.session(python=PYTHON_VERSION)
+# TODO heck why it does not wor in venv (does not find constraint module)
+# @nox.session(python=PYTHON_VERSION)
+@nox.session(python=False)  # disable venv
 def check_notebooks(session):
     """runtime checking of notebooks"""
-    session.install('nbconvert')
-    session.install('--quiet', '-r', 'requirements.txt')
-    import os
+    # session.install('nbconvert')
+    # session.install('--quiet', '-r', 'requirements.txt')
+    session.run('pip', 'install', '--quiet', 'nbconvert')
+    session.run('pip', 'install', '--quiet', '-r', 'requirements.txt')
+#    import os
     for root, _dirs, files in os.walk('..'):
         if 'output' not in root:
             for name in files:
@@ -105,6 +115,8 @@ def check_notebooks(session):
                             session.run(
                                     'jupyter',
                                     'nbconvert',
+                                    '--output-dir',
+                                    BUILD_DIR,
                                     '--to',
                                     'notebook',
                                     '--execute',

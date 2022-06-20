@@ -1,3 +1,18 @@
 #python 3.8
+
+# calculus
 numpy == 1.22.2
+scipy
+
+# chart/plot
 matplotlib == 3.5.2
+
+# graph
+networkx
+
+# constraint optimisation
+python-constraint
+
+# Bee colonies
+beecolpy
+ecabc
