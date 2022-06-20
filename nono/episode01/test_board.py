@@ -1,10 +1,10 @@
-import pytest
+import sys
+from io import StringIO
 
-from episode01.board import BoardMark, Board
+from episode01.board import Board, BoardMark
 from episode01.samples import clues2x2
 
-from io import StringIO
-import sys
+import pytest
 
 
 def test_init():

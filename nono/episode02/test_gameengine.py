@@ -1,5 +1,6 @@
-from episode02.gameengine import GameEngine
 from episode01.samples import clues2x2, solution2x2
+
+from episode02.gameengine import GameEngine
 
 
 def test_init():
