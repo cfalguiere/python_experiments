@@ -1,0 +1,3 @@
+[darglint]
+# Configure darglint to accept one-line docstrings
+strictness = short

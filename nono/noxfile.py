@@ -3,11 +3,12 @@ import os
 import nox
 
 nox.options.sessions = ["lint", "tests", "lint_notebooks", "check_notebooks"]
-# 'mypy', 'pytype',
+# 'mypy', 'pytype', 'docs'
 
 game_utils_prefixes = ['01', '02', '03a', '03b', '03c', '03d', "04"]
-current_prefixe = ['05']
-prefixes = current_prefixe
+solvers_prefix = ['05']
+current_prefix = ['04']
+prefixes = current_prefix
 
 nox.options.reuse_existing_virtualenvs = True
 
@@ -18,12 +19,14 @@ BUILD_DIR = "build"
 
 @nox.session(python=PYTHON_VERSION)
 def lint(session):
-    """static checking - configuration in .flake8"""
+    """Check code - configuration in .flake8."""
     session.install("flake8",
                     "flake8-bandit",
                     "flake8-black",
                     "flake8-bugbear",
-                    "flake8-import-order")
+                    "flake8-docstrings",
+                    "flake8-import-order",
+                    "darglint")
     episodes = [f'episode{p}' for p in prefixes]
     session.run(
             'flake8',
@@ -32,12 +35,12 @@ def lint(session):
             # '--ignore=E501,I202,F401,F841',
             '--show-source',
             # '--verbose',
-            *episodes, 'noxfile.py')
+            *episodes, 'noxfile.py', 'docs/conf.py')
 
 
 @nox.session(python=PYTHON_VERSION)
 def mypy(session):
-    """ static type checking - configuration in mypy.ini"""
+    """Check types - configuration in mypy.ini."""
     session.install('mypy')
     episodes = [f'episode{p}' for p in prefixes
                 if p >= "04"]
@@ -48,7 +51,7 @@ def mypy(session):
 
 @nox.session(python=PYTHON_VERSION)
 def pytype(session):
-    """ static type checking - inference based"""
+    """Check types with inference - inference based."""
     session.install('pytype')
     episodes = [f'episode{p}' for p in prefixes
                 if p >= "04"]
@@ -59,15 +62,22 @@ def pytype(session):
 
 @nox.session(python=PYTHON_VERSION)
 def tests(session):
-    """unit testing - configuration in pytest.ini"""
+    """Unit test - configuration in pytest.ini."""
     session.install('pytest', 'testfixtures', 'coverage', 'pytest-cov')
     session.install('--quiet', '-r', 'requirements.txt')
     session.run('pytest', '--cov-report', 'term')
 
 
+@nox.session(python="3.8")
+def docs(session):
+    """Build the documentation - configuratin in docs/conf.py."""
+    session.install("sphinx")
+    session.run("sphinx-build", "docs", "docs/_build")
+
+
 @nox.session(python=PYTHON_VERSION)
 def lint_notebooks(session):
-    """static checking of notebooks"""
+    """Check notebooks code."""
 
     # flakehell requieres toml
     # session.install('flake8', 'flakehell')
@@ -98,7 +108,7 @@ def lint_notebooks(session):
 # @nox.session(python=PYTHON_VERSION)
 @nox.session(python=False)  # disable venv
 def check_notebooks(session):
-    """runtime checking of notebooks"""
+    """Checking notebooks for runtime errors."""
     # session.install('nbconvert')
     # session.install('--quiet', '-r', 'requirements.txt')
     session.run('pip', 'install', '--quiet', 'nbconvert')
