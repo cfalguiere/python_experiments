@@ -140,3 +140,7 @@ lint/
 
 # MAC OS
 .DS_Store
+
+# Sphinx outputs
+index.doctree
+environment.pickle

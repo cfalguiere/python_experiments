@@ -4,7 +4,7 @@ import os
 
 import nox
 
-nox.options.sessions = ["lint", "tests", "lint_notebooks", "check_notebooks"]
+nox.options.sessions = ['lint', 'tests', 'docs', 'lint_notebooks', 'check_notebooks']
 # 'mypy', 'pytype', 'docs'
 
 intro_prefixes = ['01', '02', '03a', '03b', '03c', '03d']
@@ -74,8 +74,14 @@ def tests(session):
 
 @nox.session(python="3.8")
 def docs(session):
-    """Build the documentation - configuratin in docs/conf.py."""
+    """Build the documentation.
+
+    configuration in docs/conf.py.
+    template in index.rst.
+    """
     session.install("sphinx")
+    session.install('--quiet', '-r', 'requirements.txt')
+    session.install('--quiet', '-e', '.')
     session.run("sphinx-build", "docs", "docs/_build")
 
 
@@ -116,7 +122,7 @@ def check_notebooks(session):
     # session.install('--quiet', '-r', 'requirements.txt')
     session.run('pip', 'install', '--quiet', 'nbconvert')
     session.run('pip', 'install', '--quiet', '-r', 'requirements.txt')
-#    import os
+    # import os
     for root, _dirs, files in os.walk('..'):
         if 'output' not in root:
             for name in files:
