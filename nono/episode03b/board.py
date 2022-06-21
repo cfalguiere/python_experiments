@@ -1,3 +1,5 @@
+"""Board components."""
+
 from enum import Enum
 from functools import reduce
 from operator import mul
@@ -7,20 +9,18 @@ import numpy as np
 
 # constants for mark lette
 class BoardMark(Enum):
+    """Constants for board marks."""
+
     INIT = -1
     FILLER = 0
     BLACK = 1
 
 
 class Board:
-    """
-    Manage the board.
-    """
+    """Manage the board."""
 
     def __init__(self, a_puzzle):
-        """
-        Board constructor
-        """
+        """Construct a Board."""
         # given parameters
         self.puzzle = a_puzzle
 
@@ -35,30 +35,22 @@ class Board:
                               default_value, dtype=int)
 
     def mark(self, row, col, mark):
-        """
-        Mark a cell
-        """
+        """Alter the state of the cell with the given mark."""
         self.states[row, col] = mark.value
 
     def fill_all(self, states):
-        """
-        Uodate all cells with states
-        """
+        """Update all cells with the given states."""
         self.states.flat[:] = states
 
     def count_empty(self):
-        """
-        Evaluate how much of the board is filled
-        """
+        """Evaluate how much of the board is still empty."""
         length = reduce(mul, self.states.shape)
         count = len([c for c in self.states.reshape(length)
                      if c == BoardMark.INIT.value])
         return count
 
     def prettyprint(self):
-        """
-        Pretty print of the board
-        """
+        """Pretty print of the board."""
         print("cols:", end=" ")
         print(*self.puzzle.given_clues['cols'])  # * unpacks and remove []s
         print("rows:")

@@ -1,3 +1,4 @@
+"""Provide some basic examples for notebooks and unit tests."""
 import numpy as np
 
 # ------------------------

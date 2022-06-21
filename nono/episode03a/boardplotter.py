@@ -1,3 +1,5 @@
+"""Board plotter components."""
+
 import matplotlib.pyplot as plt
 from matplotlib.colors import LinearSegmentedColormap
 
@@ -5,12 +7,13 @@ import numpy as np
 
 
 class BoardPlotter:
-    """
-    Plot the board.
-    Requiere %matplotlib inline .
+    """Plot the board.
+
+    Require %matplotlib inline.
     """
 
     def __init__(self, some_clues):
+        """Construct a BoardPlotter."""
         self.clues = some_clues
 
         # board dimensions
@@ -42,6 +45,10 @@ class BoardPlotter:
         self.cmap = self.build_color_map()
 
     def build_color_map(self):
+        """Build a colormap for black/white boards.
+
+        Color switch at 0.5.
+        """
         cdict = {'red': [(0.0, 0.6196078431372549, 0.6196078431372549),
                          (0.5, 1.0, 1.0),
                          (1.0, 0.03137254901960784, 0.03137254901960784)],
@@ -58,6 +65,7 @@ class BoardPlotter:
         return nono_cmap
 
     def show(self, a_board):
+        """Plot the board."""
         # WARNING :  the board is row col, while the fig is col row
         data = a_board.states
 

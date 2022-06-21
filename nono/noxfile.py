@@ -1,3 +1,5 @@
+"""Check code in episodes and notebooks."""
+
 import os
 
 import nox
@@ -5,10 +7,12 @@ import nox
 nox.options.sessions = ["lint", "tests", "lint_notebooks", "check_notebooks"]
 # 'mypy', 'pytype', 'docs'
 
-game_utils_prefixes = ['01', '02', '03a', '03b', '03c', '03d', "04"]
-solvers_prefix = ['05']
+intro_prefixes = ['01', '02', '03a', '03b', '03c', '03d']
+utils_prefixes = ['04']
+solvers_prefixes = ['05']
 current_prefix = ['04']
-prefixes = current_prefix
+type_check_prefixes = utils_prefixes + solvers_prefixes
+prefixes = intro_prefixes + type_check_prefixes
 
 nox.options.reuse_existing_virtualenvs = True
 
@@ -78,7 +82,6 @@ def docs(session):
 @nox.session(python=PYTHON_VERSION)
 def lint_notebooks(session):
     """Check notebooks code."""
-
     # flakehell requieres toml
     # session.install('flake8', 'flakehell')
     # session.run(
@@ -108,7 +111,7 @@ def lint_notebooks(session):
 # @nox.session(python=PYTHON_VERSION)
 @nox.session(python=False)  # disable venv
 def check_notebooks(session):
-    """Checking notebooks for runtime errors."""
+    """Check notebooks for runtime errors."""
     # session.install('nbconvert')
     # session.install('--quiet', '-r', 'requirements.txt')
     session.run('pip', 'install', '--quiet', 'nbconvert')

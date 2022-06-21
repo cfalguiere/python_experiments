@@ -1,3 +1,5 @@
+"""Board plotter components."""
+
 from math import ceil
 
 from episode04.board import Board
@@ -9,12 +11,13 @@ import numpy as np
 
 
 class BoardPlotter:
-    """
-    Plot the board.
-    Require %matplotlib inline .
+    """Plot the board.
+
+    Require %matplotlib inline.
     """
 
     def __init__(self, a_puzzle):
+        """Construct a BoardPlotter."""
         self.clues = a_puzzle.given_clues
 
         # board dimensions
@@ -49,6 +52,10 @@ class BoardPlotter:
         self.boards = []
 
     def build_color_map(self):
+        """Build a colormap for black/white boards.
+
+        Color switch at 0.5.
+        """
         cdict = {'red': [(0.0, 0.6196078431372549, 0.6196078431372549),
                          (0.5, 1.0, 1.0),
                          (1.0, 0.03137254901960784, 0.03137254901960784)],
@@ -65,15 +72,18 @@ class BoardPlotter:
         return nono_cmap
 
     def show(self, a_board):
+        """Plot the board."""
         # set some canvas
         fig, ax = plt.subplots(figsize=(self.fig_width, self.fig_height))
         self._plot(a_board, ax)
         plt.show()  # plt is static
 
     def append_board(self, a_board):
+        """Append a board to a list of boards (history of states)."""
         self.boards.append(a_board)
 
     def show_all(self, some_boards=None):
+        """Plot several boards."""
         boards = some_boards
         if some_boards is None:
             boards = self.boards

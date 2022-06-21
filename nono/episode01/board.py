@@ -1,3 +1,5 @@
+"""Board components."""
+
 # built in imports
 from enum import Enum
 
@@ -8,23 +10,18 @@ import numpy as np
 
 
 class BoardMark(Enum):
-    """
-    Constants for board marks
-    """
+    """Constants for board marks."""
+
     INIT = -1
     FILLER = 0
     BLACK = 1
 
 
 class Board:
-    """
-    Manage the board.
-    """
+    """Manage the board."""
 
     def __init__(self, some_clues):
-        """
-        board constructor
-        """
+        """Construct a Board."""
         # given parameters
         self.clues = some_clues
 
@@ -38,15 +35,11 @@ class Board:
                               default_value, dtype=int)
 
     def mark(self, row, col, mark):
-        """
-        fill the cell with a mark
-        """
+        """Alter the state of the cell with the given mark."""
         self.states[row, col] = mark.value
 
     def prettyprint(self):
-        """
-        pretty print of the board
-        """
+        """Pretty print of the board."""
         print("cols:", end=" ")
         print(*self.clues['cols'])  # * unpacks and remove []s
         print("rows:")
