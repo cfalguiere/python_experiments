@@ -6,6 +6,7 @@ import os
 
 import nox
 
+"""
 nox.options.sessions = [
     'lint',
     'mypy',
@@ -14,6 +15,10 @@ nox.options.sessions = [
     'docs',
     'lint_notebooks',
     'check_notebooks'
+]
+"""
+nox.options.sessions = [
+    'lint'
 ]
 
 intro_prefixes = ['01', '02', '03a', '03b', '03c', '03d']

@@ -26,8 +26,19 @@ class BoardGameEngine:
              apply: bool = True) -> bool:
         """Play one cell.
 
-        Implementation shouod be provided by the subclass.
-        It is used in play_multiple.
+        Implementation should be provided by the subclass.
+
+        Parameters
+        ----------
+        row: int
+            vertical position of the mark. Should be between 0 and height-1.
+        col: int
+            horizontal position of the mark. Should be between 0 and wirth-1.
+        mark: BoardMark
+            The mark to be place. it is defined by the Enum BoardMark.
+        apply: bool
+            True if the mark should change the current board state.
+            Default to True.
         """
         pass
 
@@ -58,44 +69,83 @@ class NonoGameEngine(BoardGameEngine):
         self.track = track
         self.board_states_history: List[Board] = []
 
+    # TODO isoler check de play
+    # TODO verif partielle
     def play(self,
              row: int, col: int, mark: BoardMark,
              apply: bool = True) -> bool:
         """Play one cell.
 
         Play the game by sending the state of one cell.
-        Always return True.
         If apply, update the board.
+        Always return True.
+
+        Parameters
+        ----------
+        row: int
+            vertical position of the mark. Should be between 0 and height-1
+        col: int
+            horizontal position of the mark. Should be between 0 and wirth-1
+        mark: BoardMark
+            The mark to be place. it is defined by the Enum BoardMark
+        apply: bool
+            True if the mark should change the current board state
+
+        Returns
+        -------
+        bool
+            Always True
         """
         if apply:
             # apply the given state
             self.board.mark(row, col, mark)
             if self.track:
+                # will be added to the sequence of solutions
                 self.board_states_history.append(self.board.states.copy())
         return True
 
     # todo append submissions`
     # todo autofill
+    # TODO isoler check de play
     def submit(self, states_list: List[int]) -> int:
         """Submit the solution.
 
         Submit the solution and give all the cells's state in one action.
-        Check whether the states given a the registered solution
+        It is not required to provides all the cells values.
+        Missing Blacks are counted as errors. Fillers are ignored.
         Returns the number of errors.
-        Missing Blacks are counted as errors - fillers are ignored.
+        The submission ends the game.
+
+        Parameters
+        ----------
+        states_list: List[int]
+            The cell states as a one dimension list of -1,0,1
+            corresponding to marks defined in BoardMark.
+
+        Returns
+        -------
+        int
+            The number of errors.
         """
+        # end the game with this solutions
         self.board.fill_all(states_list)
         if self.track:
+            # will be added to the sequence of solutions
             self.board_states_history.append(self.board.states.copy())
 
         # board is okay if without errors on blacks
         return self.count_errors()
 
-    def is_solved(self) -> int:
+    def is_solved(self) -> bool:
         """Check whether the puzzle is solved.
 
         Accept that filler cells are left undefined.
         In other words it only takes blacks into account.
+
+        returns
+        -------
+        bool
+            True if the game is solved
         """
         return self.count_errors() == 0
 
@@ -170,6 +220,8 @@ class SolvedNonoGameEngine(NonoGameEngine):
         # init score
         self.errors = 0
 
+    # TODO check position for bounds
+    # TODO isoler check de play
     def play(self,
              row: int, col: int, mark: BoardMark,
              apply: bool = True) -> bool:
@@ -178,6 +230,23 @@ class SolvedNonoGameEngine(NonoGameEngine):
         Play the game by sending the state of one cell.
         Check whether an action is valid given a solution.
         If apply is True, update the board.
+
+        Parameters
+        ----------
+        row: int
+            vertical position of the mark. Should be between 0 and height-1
+        col: int
+            horizontal position of the mark. Should be between 0 and wirth-1
+        mark: BoardMark
+            The mark to be place. it is defined by the Enum BoardMark
+        apply: bool
+            True if the mark should change the current board state
+
+        Returns
+        -------
+        bool
+            True if the mark is correct
+            (same mark in the solution at the same location)
         """
         okay = self.solution[row, col] == mark.value
         if not okay:
@@ -188,22 +257,45 @@ class SolvedNonoGameEngine(NonoGameEngine):
             true_mark = BoardMark(self.solution[row, col])
             self.board.mark(row, col, true_mark)
             if self.track:
+                # will be added to the sequence of solutions
                 self.board_states_history.append(self.board.states.copy())
-        # __eq__ rtuens a type Any - workaround to pass mypy check
+
+        # __eq__ returns a type Any - workaround to pass mypy check
         return bool(okay)
 
     # TODO accept np array
+    # TODO same semantic ad not solved and add a compare
+    # TODO isoler check de play
     def submit(self, states_list: List[int], apply: bool = True) -> int:
         """Submit the solution.
 
         Submit the solution and give all the cells's state in one action.
-        Check whether the states given a the registered solution.
+        It is not required to provide all the cells values;
+        Only Blacks are taken into account.
+        Check whether the states is correct given the registered solution.
+
+        Parameters
+        ----------
+        states_list: List[int]
+            The cell states as a one dimension list of -1,0,1
+            corresponding to marks defined in BoardMark.
+        apply: bool
+            Tell whether this solution is the end of the game.
+            If True the board will be filled with states and it ends the game.
+            If False this fonction can be used to compute the number of errors.
+
+        Returns
+        -------
+        int
+            The number of errors computed as the number of black cells that
+            do not match the solution.
         """
         if apply:
+            # end the game with this solutions
             self.board.fill_all(states_list)
-
-        if self.track:
-            self.board_states_history.append(self.board.states.copy())
+            if self.track:
+                # will be added to the sequence of solutions
+                self.board_states_history.append(self.board.states.copy())
 
         # board is okay when blacks are correrct
         self.errors = sum([abs(p - e)
@@ -217,7 +309,9 @@ class SolvedNonoGameEngine(NonoGameEngine):
 
         By convention, unfilled are not errors.
 
-        Returns:
-            int: The number of errors.
+        Returns
+        -------
+        int
+            The number of errors. Unfilled are not consider'd as error.
         """
         return self.errors

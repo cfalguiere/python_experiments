@@ -73,6 +73,7 @@ class NonoGameEngine(BoardGameEngine):
             # apply the given state
             self.board.mark(row, col, mark)
             if self.track:
+                # will be added to the sequence of solutions
                 self.board_states_history.append(self.board.states.copy())
         return True
 
@@ -86,8 +87,10 @@ class NonoGameEngine(BoardGameEngine):
         Returns the number of errors.
         Missing Blacks are counted as errors - fillers are ignored.
         """
+        # end the game with this solutions
         self.board.fill_all(states_list)
         if self.track:
+            # will be added to the sequence of solutions
             self.board_states_history.append(self.board.states.copy())
 
         # board is okay if without errors on blacks
@@ -191,7 +194,9 @@ class SolvedNonoGameEngine(NonoGameEngine):
             true_mark = BoardMark(self.solution[row, col])
             self.board.mark(row, col, true_mark)
             if self.track:
+                # will be added to the sequence of solutions
                 self.board_states_history.append(self.board.states.copy())
+
         # __eq__ rtuens a type Any - workaround to pass mypy check
         return bool(okay)
 
@@ -203,10 +208,11 @@ class SolvedNonoGameEngine(NonoGameEngine):
         Check whether the states given a the registered solution.
         """
         if apply:
+            # end the game with this solutions
             self.board.fill_all(states_list)
-
-        if self.track:
-            self.board_states_history.append(self.board.states.copy())
+            if self.track:
+                # will be added to the sequence of solutions
+                self.board_states_history.append(self.board.states.copy())
 
         # board is okay when blacks are correrct
         self.errors = sum([abs(p - e)

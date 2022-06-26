@@ -80,11 +80,12 @@ class NonoGameEngine(BoardGameEngine):
         Returns the number of errors.
         Missing Blacks are counted as errors - fillers are ignored.
         """
+        # end the game with this solutions
         self.board.fill_all(states_list)
         # board is okay if without errors on blacks
         return self.count_errors()
 
-    def is_solved(self) -> int:
+    def is_solved(self) -> bool:
         """Check whether the puzzle is solved.
 
         Accept that filler cells are left undefined.
@@ -167,6 +168,7 @@ class SolvedNonoGameEngine(NonoGameEngine):
             # apply the real state which is what games usually do
             true_mark = BoardMark(self.solution[row, col])
             self.board.mark(row, col, true_mark)
+
         # __eq__ rtuens a type Any - workaround to pass mypy check
         return bool(okay)
 
@@ -178,6 +180,7 @@ class SolvedNonoGameEngine(NonoGameEngine):
         Check whether the states given a the registered solution.
         """
         if apply:
+            # end the game with this solutions
             self.board.fill_all(states_list)
         # board is okay when blacks are correrct
         self.errors = sum([abs(p - e)

@@ -57,6 +57,11 @@ class BoardPlotter:
         """Build a colormap for black/white boards.
 
         Color switch at 0.5.
+
+        Returns
+        -------
+        Any
+            The color map built by LinearSegmentedColormap
         """
         cdict = {'red': [(0.0, 0.6196078431372549, 0.6196078431372549),
                          (0.5, 1.0, 1.0),

@@ -35,12 +35,18 @@ class Puzzle:
     def get_black_count(self, axis: str = 'rows') -> int:
         """Compute the number of blacks cells required by the clues.
 
-        Args:
-            axis (str): either rows or cols. Default to rows.
+        Parameters
+        ----------
+        axis: str
+            Should it count blacks for rows or cols.
+            Either rows or cols. Default to rows.
 
-        Returns:
-            int: The number of blacks cells required.
+        Returns
+        -------
+        int
+            The number of blacks cells required.
         """
+        # sums the number of blacks (represented by 1)
         return sum(chain.from_iterable(self.norm_clues[axis]))
 
     def is_consistent(self) -> bool:
