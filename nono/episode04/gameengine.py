@@ -1,4 +1,4 @@
-"""Board game and Nonogram related componenets."""
+"""Board game and Nonogram related components."""
 
 from itertools import groupby
 from operator import mul
@@ -87,7 +87,7 @@ class NonoGameEngine(BoardGameEngine):
         col: int
             horizontal position of the mark. Should be between 0 and wirth-1
         mark: BoardMark
-            The mark to be place. it is defined by the Enum BoardMark
+            The mark to be placed. it is defined by the Enum BoardMark
         apply: bool
             True if the mark should change the current board state
 
@@ -238,7 +238,7 @@ class SolvedNonoGameEngine(NonoGameEngine):
         col: int
             horizontal position of the mark. Should be between 0 and wirth-1
         mark: BoardMark
-            The mark to be place. it is defined by the Enum BoardMark
+            The mark to be placed. it is defined by the Enum BoardMark
         apply: bool
             True if the mark should change the current board state
 
@@ -312,6 +312,6 @@ class SolvedNonoGameEngine(NonoGameEngine):
         Returns
         -------
         int
-            The number of errors. Unfilled are not consider'd as error.
+            The number of errors. Unfilled are not considered as error.
         """
         return self.errors

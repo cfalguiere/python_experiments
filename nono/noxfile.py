@@ -18,15 +18,22 @@ nox.options.sessions = [
 ]
 """
 nox.options.sessions = [
-    'lint'
+    'lint',
+    'mypy',
+    'pytype',
+    'tests',
+    'docs',
+    'lint_notebooks',
+    'check_notebooks'
 ]
 
 intro_prefixes = ['01', '02', '03a', '03b', '03c', '03d']
 utils_prefixes = ['04']
 solvers_prefixes = ['05']
-current_prefix = ['04']
+current_prefix = ['05']
 type_check_prefixes = utils_prefixes + solvers_prefixes
 prefixes = intro_prefixes + type_check_prefixes
+# prefixes = current_prefix
 
 nox.options.reuse_existing_virtualenvs = True
 
@@ -48,13 +55,13 @@ def lint(session):
                     "darglint")
     episodes = [f'episode{p}' for p in prefixes]
     session.run(
-            'flake8',
-            '--exclude=.git,__pycache__,.nox,.pytest_cache,target',
-            # '--select=W,E112,E113,F,C9,N8',
-            # '--ignore=E501,I202,F401,F841',
-            '--show-source',
-            # '--verbose',
-            *episodes, 'noxfile.py', 'docs/conf.py')
+        'flake8',
+        '--exclude=.git,__pycache__,.nox,.pytest_cache,target',
+        # '--select=W,E112,E113,F,C9,N8',
+        # '--ignore=E501,I202,F401,F841',
+        '--show-source',
+        # '--verbose',
+        *episodes, 'noxfile.py', 'docs/conf.py')
 
 
 @nox.session(python=PYTHON_VERSION)
@@ -67,8 +74,8 @@ def mypy(session):
     episodes = [f'episode{p}' for p in prefixes
                 if p >= "03"]
     session.run(
-            'mypy',
-            *episodes)
+        'mypy',
+        *episodes)
 
 
 @nox.session(python=PYTHON_VERSION)
@@ -81,8 +88,8 @@ def pytype(session):
     episodes = [f'episode{p}' for p in prefixes
                 if p >= "03"]
     session.run(
-            'pytype',
-            *episodes)
+        'pytype',
+        *episodes)
 
 
 @nox.session(python=PYTHON_VERSION)
@@ -132,10 +139,10 @@ def lint_notebooks(session):
                         if 'checkpoint' not in name:
                             filename = os.path.join(root, name)
                             session.run(
-                                    'nblint',
-                                    '--linter',
-                                    'pyflakes',
-                                    filename)
+                                'nblint',
+                                '--linter',
+                                'pyflakes',
+                                filename)
 
 
 # TODO heck why it does not wor in venv (does not find constraint module)
@@ -158,13 +165,13 @@ def check_notebooks(session):
                         if 'checkpoint' not in name:
                             filename = os.path.join(root, name)
                             session.run(
-                                    'jupyter',
-                                    'nbconvert',
-                                    '--output-dir',
-                                    BUILD_DIR,
-                                    '--to',
-                                    'notebook',
-                                    '--execute',
-                                    '--output',
-                                    'check',
-                                    filename)
+                                'jupyter',
+                                'nbconvert',
+                                '--output-dir',
+                                BUILD_DIR,
+                                '--to',
+                                'notebook',
+                                '--execute',
+                                '--output',
+                                'check',
+                                filename)

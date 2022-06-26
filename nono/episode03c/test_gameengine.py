@@ -5,8 +5,8 @@ from episode03a.samples import clues2x2, clues5x5s, solution2x2, solution5x5s
 from episode03b.board import BoardMark
 from episode03b.puzzle import Puzzle
 
-from episode03c.gameengine import BoardGameEngine, \
-                                  NonoGameEngine, SolvedNonoGameEngine
+from episode03c.gameengine import BoardGameEngine
+from episode03c.gameengine import NonoGameEngine, SolvedNonoGameEngine
 
 
 def test_init():

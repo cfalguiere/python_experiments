@@ -1,4 +1,4 @@
-"""Board game and Nonogram related componenets."""
+"""Board game and Nonogram related components."""
 
 from itertools import groupby
 from operator import mul
