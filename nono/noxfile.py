@@ -1,11 +1,20 @@
+# type: ignore
+# This is a test file, skipping type checking in it.
 """Check code in episodes and notebooks."""
 
 import os
 
 import nox
 
-nox.options.sessions = ['lint', 'tests', 'docs', 'lint_notebooks', 'check_notebooks']
-# 'mypy', 'pytype', 'docs'
+nox.options.sessions = [
+    'lint',
+    'mypy',
+    'pytype',
+    'tests',
+    'docs',
+    'lint_notebooks',
+    'check_notebooks'
+]
 
 intro_prefixes = ['01', '02', '03a', '03b', '03c', '03d']
 utils_prefixes = ['04']
@@ -24,6 +33,7 @@ BUILD_DIR = "build"
 @nox.session(python=PYTHON_VERSION)
 def lint(session):
     """Check code - configuration in .flake8."""
+    session.log('================ lint ================')
     session.install("flake8",
                     "flake8-bandit",
                     "flake8-black",
@@ -45,9 +55,12 @@ def lint(session):
 @nox.session(python=PYTHON_VERSION)
 def mypy(session):
     """Check types - configuration in mypy.ini."""
+    session.log('================ mypy ================')
     session.install('mypy')
+    session.run('pip', 'install', '--quiet', '-r', 'requirements.txt')
+    session.install('--quiet', '-e', '.')
     episodes = [f'episode{p}' for p in prefixes
-                if p >= "04"]
+                if p >= "03"]
     session.run(
             'mypy',
             *episodes)
@@ -56,9 +69,12 @@ def mypy(session):
 @nox.session(python=PYTHON_VERSION)
 def pytype(session):
     """Check types with inference - inference based."""
+    session.log('================ pytype ================')
     session.install('pytype')
+    session.run('pip', 'install', '--quiet', '-r', 'requirements.txt')
+    session.install('--quiet', '-e', '.')
     episodes = [f'episode{p}' for p in prefixes
-                if p >= "04"]
+                if p >= "03"]
     session.run(
             'pytype',
             *episodes)
@@ -67,7 +83,9 @@ def pytype(session):
 @nox.session(python=PYTHON_VERSION)
 def tests(session):
     """Unit test - configuration in pytest.ini."""
+    session.log('================ tests ================')
     session.install('pytest', 'testfixtures', 'coverage', 'pytest-cov')
+    session.run('pip', 'install', '--quiet', '-r', 'requirements.txt')
     session.install('--quiet', '-r', 'requirements.txt')
     session.run('pytest', '--cov-report', 'term')
 
@@ -79,6 +97,7 @@ def docs(session):
     configuration in docs/conf.py.
     template in index.rst.
     """
+    session.log('================ docs ================')
     session.install("sphinx")
     session.install('--quiet', '-r', 'requirements.txt')
     session.install('--quiet', '-e', '.')
@@ -94,6 +113,7 @@ def lint_notebooks(session):
     #        'flakehell',
     #        'lint',
     #        './notebooks/')
+    session.log('================ lint_notebooks ================')
     session.install('nblint')
     session.install('--quiet', '-r', 'requirements.txt')
 
@@ -120,6 +140,7 @@ def check_notebooks(session):
     """Check notebooks for runtime errors."""
     # session.install('nbconvert')
     # session.install('--quiet', '-r', 'requirements.txt')
+    session.log('================ check_notebooks ================')
     session.run('pip', 'install', '--quiet', 'nbconvert')
     session.run('pip', 'install', '--quiet', '-r', 'requirements.txt')
     # import os

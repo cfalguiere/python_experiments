@@ -1,8 +1,12 @@
 """Board plotter components."""
 
+from functools import partial
 from math import ceil
+from typing import Any, List
 
 from episode04.board import Board
+from episode04.common import NormClueType
+from episode04.puzzle import Puzzle
 
 import matplotlib.pyplot as plt
 from matplotlib.colors import LinearSegmentedColormap
@@ -16,7 +20,7 @@ class BoardPlotter:
     Require %matplotlib inline.
     """
 
-    def __init__(self, a_puzzle):
+    def __init__(self, a_puzzle: Puzzle):
         """Construct a BoardPlotter."""
         self.clues = a_puzzle.given_clues
 
@@ -32,26 +36,24 @@ class BoardPlotter:
         self.fig_width = int(self.width / 2)
         self.fig_height = int(self.height / 2)
 
-        # rows labels
-        def row_clue_to_label(v):
-            is_value = not isinstance(v, list)
-            return str(v) if is_value else ' '.join(map(str, v))
-        self.rows_labels = list(map(row_clue_to_label, self.clues['rows']))
+        # labels
+        def to_label(v: NormClueType, sep: str = '') -> str:
+            return sep.join(map(str, v))
 
-        # columns labels
-        def col_clue_to_label(v):
-            # print(v)
-            is_value = not isinstance(v, list)
-            return str(v) if is_value else '\n'.join(map(str, v))
-        self.columns_labels = list(map(col_clue_to_label, self.clues['cols']))
+        rows_to_label = partial(to_label, sep=' ')
+        cols_to_label = partial(to_label, sep='\n')
+
+        norm_clues = a_puzzle.norm_clues
+        self.rows_labels = list(map(rows_to_label, norm_clues['rows']))
+        self.columns_labels = list(map(cols_to_label, norm_clues['cols']))
 
         # color map
         self.cmap = self.build_color_map()
 
         # collection of boards to be plotted
-        self.boards = []
+        self.sequence: List[Board] = []
 
-    def build_color_map(self):
+    def build_color_map(self) -> Any:
         """Build a colormap for black/white boards.
 
         Color switch at 0.5.
@@ -71,43 +73,41 @@ class BoardPlotter:
         nono_cmap = LinearSegmentedColormap('nono', cdict)
         return nono_cmap
 
-    def show(self, a_board):
+    def show(self, a_board: Board) -> None:
         """Plot the board."""
         # set some canvas
         fig, ax = plt.subplots(figsize=(self.fig_width, self.fig_height))
         self._plot(a_board, ax)
         plt.show()  # plt is static
 
-    def append_board(self, a_board):
-        """Append a board to a list of boards (history of states)."""
-        self.boards.append(a_board)
+    def append_to_sequence(self, a_board: Board) -> None:
+        """Append a board to a sequence of boards (history of states)."""
+        self.sequence.append(a_board)
 
-    def show_all(self, some_boards=None):
+    def show_sequence(self) -> None:
+        """Show the sequence of boards."""
+        self.show_many(self.sequence)
+
+    def show_many(self, some_boards: List[Board]) -> None:
         """Plot several boards."""
-        boards = some_boards
-        if some_boards is None:
-            boards = self.boards
-
         # max 12
         # TODO nb depending on board size
         cols_mapping = {2: 7, 5: 5}
         n_cols = cols_mapping[self.width]
-        n_lines = ceil(len(boards) / n_cols)
+        n_lines = ceil(len(some_boards) / n_cols)
 
         fig = plt.figure()
         fig.subplots_adjust(left=5, right=15, top=13, bottom=5)
 
-        for i, board in enumerate(boards):
+        for i, board in enumerate(some_boards):
             # enumerate is base 0. figures are labelled base 1
             # TODO explain slots names
             plt.rcParams['figure.figsize'] = [self.fig_width, self.fig_height]
             ax = fig.add_subplot(n_lines, n_cols, i + 1)
             self._plot(board, ax)
 
-        plt.show()  # plt is static
-
     # private method
-    def _plot(self, a_board, ax):
+    def _plot(self, a_board: Board, ax: Any) -> None:
         # WARNING :  the board is row col, while the fig is col row
         if isinstance(a_board, Board):
             data = a_board.states

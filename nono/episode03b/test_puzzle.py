@@ -1,4 +1,6 @@
-from episode01.samples import clues2x2, clues5x5s
+# type: ignore
+# This is a test file, skipping type checking in it.
+from episode03a.samples import clues2x2, clues5x5s
 
 from episode03b.puzzle import Puzzle
 

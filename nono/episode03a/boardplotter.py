@@ -1,4 +1,9 @@
 """Board plotter components."""
+from typing import Any
+
+from episode01.board import Board
+
+from episode03a.common import ClueType, CluesType
 
 import matplotlib.pyplot as plt
 from matplotlib.colors import LinearSegmentedColormap
@@ -12,7 +17,7 @@ class BoardPlotter:
     Require %matplotlib inline.
     """
 
-    def __init__(self, some_clues):
+    def __init__(self, some_clues: CluesType):
         """Construct a BoardPlotter."""
         self.clues = some_clues
 
@@ -28,23 +33,25 @@ class BoardPlotter:
         self.fig_width = int(self.width / 2)
         self.fig_height = int(self.height / 2)
 
-        # rows labels
-        def row_clue_to_label(v):
+        # labels
+        def to_label(v: Any, sep: str) -> str:
+            return sep.join(map(str, v))
+
+        def row_clue_to_label(v: ClueType) -> str:
             is_list = isinstance(v, list)
-            return str(v) if not is_list else ' '.join(map(str, v))
+            return str(v) if not is_list else to_label(v, ' ')
         self.rows_labels = list(map(row_clue_to_label, self.clues['rows']))
 
-        # columns labels
-        def col_clue_to_label(v):
+        def col_clue_to_label(v: ClueType) -> str:
             # print(v)
             is_list = isinstance(v, list)
-            return str(v) if not is_list else '\n'.join(map(str, v))
+            return str(v) if not is_list else to_label(v, '\n')
         self.columns_labels = list(map(col_clue_to_label, self.clues['cols']))
 
         # color map
         self.cmap = self.build_color_map()
 
-    def build_color_map(self):
+    def build_color_map(self) -> Any:
         """Build a colormap for black/white boards.
 
         Color switch at 0.5.
@@ -64,7 +71,7 @@ class BoardPlotter:
         nono_cmap = LinearSegmentedColormap('nono', cdict)
         return nono_cmap
 
-    def show(self, a_board):
+    def show(self, a_board: Board) -> None:
         """Plot the board."""
         # WARNING :  the board is row col, while the fig is col row
         data = a_board.states

@@ -1,6 +1,7 @@
-from episode01.samples import clues2x2
-
+# type: ignore
+# This is a test file, skipping type checking in it.
 from episode03a.boardplotter import BoardPlotter
+from episode03a.samples import clues2x2
 
 
 def test_init():

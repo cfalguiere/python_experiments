@@ -1,11 +1,14 @@
 """Puzzle related components."""
 from itertools import chain
+from typing import List
+
+from episode04.common import ClueType, CluesType, NormCluesType
 
 
 class Puzzle:
     """Describe the puzzle clues and constants derived from clues."""
 
-    def __init__(self, some_clues):
+    def __init__(self, some_clues: CluesType):
         """Puzzle constructor."""
         # given parameters
         self.given_clues = some_clues
@@ -19,9 +22,9 @@ class Puzzle:
         self.cells_count = self.width * self.height
         self.required_blacks_count = self.get_black_count()
 
-    def init_norm_clues(self):
+    def init_norm_clues(self) -> NormCluesType:
         """Turn clues into a list of lists with one or more integers."""
-        def f_norm_clue(clue):
+        def f_norm_clue(clue: ClueType) -> List[int]:
             return clue if isinstance(clue, list) else [clue]
         norm_clues = {
             'rows': [f_norm_clue(clue) for clue in self.given_clues['rows']],
@@ -29,7 +32,7 @@ class Puzzle:
         }
         return norm_clues
 
-    def get_black_count(self, axis='rows'):
+    def get_black_count(self, axis: str = 'rows') -> int:
         """Compute the number of blacks cells required by the clues.
 
         Args:
@@ -40,7 +43,7 @@ class Puzzle:
         """
         return sum(chain.from_iterable(self.norm_clues[axis]))
 
-    def is_consistent(self):
+    def is_consistent(self) -> bool:
         """Check clues for consistency between rows and cols definition."""
         rows_black_count = self.get_black_count(axis='rows')
         cols_black_count = self.get_black_count(axis='cols')

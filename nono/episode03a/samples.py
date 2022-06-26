@@ -1,5 +1,5 @@
 """Provide some basic examples for notebooks and unit tests."""
-from episode04.common import CluesType, SolutionType
+from episode03a.common import CluesType, SolutionType
 
 import numpy as np
 

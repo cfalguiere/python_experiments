@@ -1,3 +1,5 @@
+# type: ignore
+# This is a test file, skipping type checking in it.
 import sys
 from io import StringIO
 

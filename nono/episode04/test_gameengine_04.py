@@ -1,3 +1,5 @@
+# type: ignore
+# This is a test file, skipping type checking in it.
 from episode04.board import BoardMark
 from episode04.gameengine import BoardGameEngine, \
                                  NonoGameEngine, SolvedNonoGameEngine

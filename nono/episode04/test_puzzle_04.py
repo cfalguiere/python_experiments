@@ -1,3 +1,5 @@
+# type: ignore
+# This is a test file, skipping type checking in it.
 from episode04.puzzle import Puzzle
 from episode04.samples import clues2x2, clues5x5s
 

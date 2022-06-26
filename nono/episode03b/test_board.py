@@ -1,7 +1,9 @@
+# type: ignore
+# This is a test file, skipping type checking in it.
 import sys
 from io import StringIO
 
-from episode01.samples import clues2x2, solution2x2
+from episode03a.samples import clues2x2, solution2x2
 
 from episode03b.board import Board, BoardMark
 from episode03b.puzzle import Puzzle
