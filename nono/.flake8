@@ -10,6 +10,8 @@ select = ANN,C,D,DAR,E,F,I,S,W,N8'
 
 #W,E112,E113,F,C9,N8'
 #'--ignore=E501,I202,F401,F841',
+ignore = S311
+# S311 Standard pseudo-random generators are not suitable for security/cryptographic purposes.
 
 per-file-ignores =
   # relax type annotations and Docstrings for tests
@@ -26,6 +28,9 @@ per-file-ignores =
 
   # relax consistency of docstrings with type annotations for episodes 03  04 FIXME temp
   episode03*/*:DAR
-  episode04/*:DAR
+  # episode04/*:DAR
+  
+  #newepisode/*:ANN,D,DAR
+
 
 # types and docs from 03 - TODO explain noxfile in 03
