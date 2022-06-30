@@ -52,11 +52,26 @@ def test_when_add_2_moves_len_is_2_in_first_trial():
     assert not np.array_equal(board_state_1, board_state_2)
 
 
-def test_when_add_1_trial_and_1_move_len_is_1_in_second_trial():
+def test_ignore_initial_empty_next_trial():
     gt = GameTracker()
     gt.next_trial()
     gt.next_trial()
     puzzle = Puzzle(clues2x2)
+    board = Board(puzzle)
+    board.mark(0, 0, BoardMark.BLACK)
+    gt.add_move(board)
+    assert gt.current == 0
+    assert len(gt.states_history[gt.current]) == 1
+
+
+def test_when_add_1_trial_and_1_move_len_is_1_in_second_trial():
+    gt = GameTracker()
+    puzzle = Puzzle(clues2x2)
+    gt.next_trial()
+    board = Board(puzzle)
+    board.mark(0, 0, BoardMark.BLACK)
+    gt.add_move(board)
+    gt.next_trial()
     board = Board(puzzle)
     board.mark(0, 0, BoardMark.BLACK)
     gt.add_move(board)
@@ -66,9 +81,12 @@ def test_when_add_1_trial_and_1_move_len_is_1_in_second_trial():
 
 def test_when_add_1_trial_and_1_error_count_there_is_1_in_second_trial():
     gt = GameTracker()
-    gt.next_trial()
-    gt.next_trial()
     puzzle = Puzzle(clues2x2)
+    gt.next_trial()
+    board = Board(puzzle)
+    board.mark(0, 0, BoardMark.BLACK)
+    gt.record_error_count(2)
+    gt.next_trial()
     board = Board(puzzle)
     board.mark(0, 0, BoardMark.BLACK)
     gt.record_error_count(2)

@@ -396,10 +396,19 @@ class GameTracker:
         self.mode = 0  # board
 
     def next_trial(self) -> None:
-        """Switch to next trial."""
+        """Switch to a new trial.
+
+        Ignore repeated next_trial at startup
+        """
+        if self.current == 0:
+            no_state = len(self.states_history[0]) == 0
+            no_count = self.error_count_history[0] == -1
+            if no_state and no_count:
+                return
+
+        self.current += 1
         self.states_history.append([])
         self.error_count_history.append(-1)
-        self.current += 1
 
     def add_move(self, board: Board) -> None:
         """Add a move."""
@@ -411,7 +420,7 @@ class GameTracker:
         self.states_history[self.current].append(board.states.copy())
 
     def record_error_count(self, count: int) -> None:
-        """Set the number of errors for this trial."""
+        """Set the number of errors for the current trial."""
         self.error_count_history[self.current] = count
 
     def print_stats(self) -> None:

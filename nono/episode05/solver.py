@@ -48,7 +48,6 @@ class TryAndErrorSolver(NonoSolver):
 
     def solve(self) -> None:
         """Solve the game."""
-        self.game.reset_trial()
         for row in range(self.puzzle.height):
             for col in range(self.puzzle.width):
                 self.game.play(row, col, BoardMark.BLACK)
