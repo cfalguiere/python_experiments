@@ -413,3 +413,10 @@ class GameTracker:
     def record_error_count(self, count: int) -> None:
         """Set the number of errors for this trial."""
         self.error_count_history[self.current] = count
+
+    def print_stats(self) -> None:
+        """Print statistics."""
+        nb = len(self.error_count_history)
+        print(f'Nb trials: {nb}')
+        for i, c in enumerate(self.error_count_history):
+            print(f'{i+1}: {c} errors')
