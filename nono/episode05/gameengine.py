@@ -66,8 +66,17 @@ class BoardGameEngine:
         """
         return self.errors
 
+    def check_solved(self) -> None:
+        """Check whether the puzzle is solved and store the result.
+
+        Accept that filler cells are left undefined.
+        In other words it only takes blacks into account.
+        """
+        is_completed = self.puzzle.get_black_count() == self.count_black()
+        self.tracker.mark_solved(self.errors == 0 and is_completed)
+
     def is_solved(self) -> bool:
-        """Check whether the puzzle is solved.
+        """Return True if the puzzle is solved.
 
         Accept that filler cells are left undefined.
         In other words it only takes blacks into account.
@@ -77,8 +86,7 @@ class BoardGameEngine:
         bool
             True if the game is solved
         """
-        is_completed = self.puzzle.get_black_count() == self.count_black()
-        return self.errors == 0 and is_completed
+        return self.tracker.is_solved
 
     def play(self, row: int, col: int, mark: BoardMark) -> bool:
         """Play one cell.
@@ -101,6 +109,7 @@ class BoardGameEngine:
         # apply the given state
         effective_mark = self.fix_move(row, col, mark)
         self.board.mark(row, col, effective_mark)
+        self.check_solved()
         if self.track:
             # will be added to the sequence of solutions
             self.tracker.add_move(self.board)
@@ -147,6 +156,7 @@ class BoardGameEngine:
 
         # board is okay when blacks are correrct
         self.check_board(states_list)
+        self.check_solved()
 
         if self.track:
             # will be added to the sequence of solutions
@@ -394,16 +404,30 @@ class GameTracker:
         self.error_count_history: List[BoardStates] = []
         self.current = -1
         self.mode = 0  # board
+        self.is_solved = False
+
+    def mark_solved(self, status: bool = True) -> None:
+        """Mark the game solved if status is True.
+
+        Parameters
+        ----------
+        status: bool
+            the status True (if solved)  or False (failed)
+        """
+        self.is_solved = status
 
     def next_trial(self) -> None:
         """Switch to a new trial.
 
         Ignore repeated next_trial at startup
         """
+        self.is_solved = False
+
         if self.current == 0:
             no_state = len(self.states_history[0]) == 0
             no_count = self.error_count_history[0] == -1
             if no_state and no_count:
+                # repeated next_trial
                 return
 
         self.current += 1
@@ -427,5 +451,7 @@ class GameTracker:
         """Print statistics."""
         nb = len(self.error_count_history)
         print(f'Nb trials: {nb}')
+        status = 'solved' if self.is_solved else 'failed'
+        print(f'Status: {status}')
         for i, c in enumerate(self.error_count_history):
             print(f'{i+1}: {c} errors')

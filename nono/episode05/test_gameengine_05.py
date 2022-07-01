@@ -106,7 +106,7 @@ def test_solved_by_submit_on_2x2():
     game2x2 = NonoGameEngine(puzzle2x2)
     n_errors = game2x2.submit([1, 0, 1, 1])
     assert n_errors == 0
-    assert game2x2.is_solved()
+    assert game2x2.is_solved() is True
 
 
 def test_solved_by_submit_on_2x2_solved():
@@ -114,7 +114,7 @@ def test_solved_by_submit_on_2x2_solved():
     game2x2 = SolvedNonoGameEngine(puzzle2x2, solution2x2)
     n_errors = game2x2.submit([1, 0, 1, 1])
     assert n_errors == 0
-    assert game2x2.is_solved()
+    assert game2x2.is_solved() is True
 
 
 def test_not_solved_after_reset():

@@ -108,7 +108,8 @@ def test_print_stats_for_2_trials():
 
     captureOutput.seek(0)
     pp = captureOutput.readlines()
-    assert len(pp) == 3
+    assert len(pp) == 4
     assert pp[0][0:-1] == "Nb trials: 2"  # strip \n
-    assert pp[1][0:-1] == "1: 4 errors"  # strip \n
-    assert pp[2][0:-1] == "2: 3 errors"  # strip \n
+    assert pp[1][0:-1] == "Status: failed"  # strip \n
+    assert pp[2][0:-1] == "1: 4 errors"  # strip \n
+    assert pp[3][0:-1] == "2: 3 errors"  # strip \n
